@@ -1,85 +1,105 @@
-## Requirements
+# F3R: A Mixed-Precision Linear Solver
 
-Hardware 
+This repository contains the software artifact accompanying a research paper under review.
 
-## Setup
+## Paper 
 
-##### Installing C++ compilers
+This artifact is associated with a research submission currently under review. The paper will be linked here upon publication.
 
-The artifact assumes `icpx`, Intel OneAPI C++/D++ compiler, for CPU experiments and `nvc++`, the C++ compiler in the NVIDIA HPC SDK, for GPU experiments.
+## Hardware Requirements
 
-One can install them following the installation guide in the official webpage:
+For CPU experimtnes, 
 
-- `icpx`: 
-- `nvc++`: 
+- **CPU**: Intel Xeon Max 9480 (or similar, with AVX512 and fp16 support)
 
-While we used `icpx` version ??? and `nvc++` version, one may use newer versions since backward compatibility should exist.
+- **GPU**: NVIDIA A100 (80 GB) or equivalent CUDA-enabled GPU
+- **RAM**: 40 GB
+- **Note**: System must suport fp16 computing
 
-##### Setup a Python environment
+## Software Requirements
 
-This artifact requires the saborn library to generate the figures.
+- **Compilers**:
+  - CPU Execution: Intel oneAPI DPC++/C++ Compiler (`icpx`), v2023.2.4+ with `-mavx512fp16`
+  - GPU Execution: NVIDIA HPC SDK `nvc++`, v23.9+ with `-cuda`
+  - Note: Compilers must support C++17
+- **Python**: 3.8+
+  - `Pandas >= 2.0.3`
+  - `seaborn==0.13.2`
+- **Build Tool**:
+  - GNU Make 4.2.1
 
-The `requirements.txt` file includes the information of all packages required in the aritifact. So, one can install them as
+One may Install `icpx` from [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html) and `nvc++` from [NVIDIA HPC SDK](https://developer.nvidia.com/nvidia-hpc-sdk-239-downloads).
 
-```
-pip install -r requirements.txt
-```
+Install Python dependencies with:
 
-Also, just installing `seaborn` would be ok, since it will install all dependencies.
-
-```
+```bash
 pip install seaborn
 ```
 
+or
 
+```bash
+pip install -r requirements.txt
+```
+
+## Setup Instructions
+
+##### 1. Clone the repository
+
+```bash
+git clone https://github.com/suzuki-hpc/F3R.git
+cd F3R
+```
+
+##### 2. Prepare datasets
+
+```zsh
+cd matrix
+zsh download.sh # SuiteSparse
+make # HPCG and HPGMP
+```
+
+##### 3. Compile solvers
+
+```bash
+cd work
+make CXX=<your C++ copmiler> # for CPU-only Execution
+make -f MakefileGPU CXX=nvc++ # for CPU-GPU Execution
+```
 
 ## Execution
 
-#### Task 1: preparing test matrices.
-
-Download 
+The complete experiment workflow:
 
 ```
-zsh download.sh
+T1 → T2 → T3_CPU + T3_GPU → T4
 ```
 
-The artifact uses GNU Make to generate matrices in the HPCG and HPGMP benchmarks:
+**T1**: Download/generate matrix data (in Setup Instructions)
 
-```
-make CXX=<any C++17 compiler>
-```
+**T2**: Compile solver code (in Setup Instructions)
 
-#### Task 2: compiling C++ source files
+**T3C/T3G**: Execute tests on the CPU/GPU node
 
-To ease the compilation, the aritficat contains two Makefiles in GNU Make, `Makefile` and `MakefileGPU.mk`. `Makefile` is to compile the sources for a CPU system:
+**T4**: Visualize and save results
 
-```
-make CXX=icpx
-```
+To perform T3C:
 
-`MakefileGPU.mk` is a file to compile for a NVIDIA GPU system. The following command will be used:
-
-```
-make -f MakefileGPU CXX=nvc++
+```bash
+# in the `work` directory
+python suite-cpu.py
+python suite-cpu2.py
 ```
 
-After that, 18 executables will be generated in the `bin` folder.
+To perform T3G:
 
-#### Task 3: running the executables
-
-##### Main test on the CPU system: `suite.py t3c`
-
-##### Main test on the GPU system: `suite.py t3g`
-
-##### Parameter examination on the CPU system : `suite.py t3p`
-
-#### Task 4: visualizing the numerical results
-
-If Task 3 has been finished properly, the following command will produce all figures similar to those in the paper in the `fig` directory:
-
-```
-python plot.py
+```bash
+python suite-gpu.py
 ```
 
+After that, numerical results will be in the `work` directory in CSV format. To visualize the results, please run a python script:
 
+```zsh
+python plot <1--6 corresponding to the figure number in the paper>
+```
 
