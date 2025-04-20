@@ -89,13 +89,15 @@ python suite-gpu.py
 ```
 
 ##### Result Visualization (T4):
-After execution, numerical results will be stored as CSV in the `work` directory. To generate figures corresponding to the paper:
+After execution, numerical results will be stored as CSV in the `work` directory. To generate a table and figures corresponding to the paper:
 
 ```zsh
-python plot.py 1  # Generates Figure 1
-python plot.py 2  # Generates Figure 2
+python plot.py table # Generates Table 3
+
+python plot.py 1     # Generates Figure 1
+python plot.py 2     # Generates Figure 2
 ...
-python plot.py 6  # Generates Figure 6
+python plot.py 6     # Generates Figure 6
 ```
 
 Each number corresponds to the figure number in the paper.

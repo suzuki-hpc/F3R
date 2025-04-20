@@ -156,6 +156,29 @@ def figure6(name, savename):
 	plt.tight_layout()
 	plt.savefig(savename)
 
+def table(name1, name2):
+	# Read results as a pands DataFrame object
+	df1 = pd.read_csv(name1)
+	df2 = pd.read_csv(name2)
+
+	df = pd.concat([df1, df2])
+	df["Tag"] = df["Method"] + "-" + df["Prec"]
+	df['Iter'] = df.apply(lambda row: np.nan if row['ImplRes'] > 1.e-8 else row["Iter"], axis = 1)
+
+	cg = df.Tag.eq("CG-double")
+	bi = df.Tag.eq("BiCGStab-double")
+	gm = df.Tag.eq("GMRES-double")
+	f3r = df.Tag.eq("F3R-double") | df.Tag.eq("F3R-float") | df.Tag.eq("F3R-_Float16")
+
+	col = ["Problem", "Tag", "Iter"]
+
+	df = df[cg | bi | gm | f3r][col]
+	df["Iter"] = df["Iter"].astype('Int64')
+	table = df.pivot(index='Problem', columns='Tag', values='Iter')
+	table = table[['CG-double', 'BiCGStab-double', 'GMRES-double', 'F3R-double', 'F3R-float', 'F3R-_Float16']]
+
+	table.to_string('table.txt', index=False)
+
 import sys
 
 if __name__ == '__main__':
@@ -178,5 +201,8 @@ if __name__ == '__main__':
 
 	if sys.argv[1] == "6":
 		figure6("t3cp-figure6.csv", "figure6.pdf")
+
+	if sys.argv[1] == "table":
+		table("t3c-symmetric.csv", "t3c-general.csv")
 
 
