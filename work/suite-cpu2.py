@@ -93,7 +93,12 @@ import sys
 if __name__ == '__main__':
 	average = int(sys.argv[1])
 	# sample = int(sys.argv[2])
-	sample = len(matrices)
+
+	if len(sys.argv) > 2:
+		parcent = int(sys.argv[2])
+	else:
+		parcent = 100
+	sample = len(matrices) * parcent // 100
 
 	results = T3CP(average, sample, 3)
 	with open("t3cp-figure3.csv", mode="w") as f:

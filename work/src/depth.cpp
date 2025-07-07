@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
   auto A32 = CSR<float, tag>(A);
   auto FF = FGMRES<_Float16, tag>(A16, M, {2, false});
   auto F = FGMRES<float, tag>(A16, FF, {4, false});
-  auto inner = FGMRES<double, tag>(A32, F, {8, false});
+  auto inner = FGMRES<float, tag>(A32, F, {8, false});
   auto solver_ = Solver<tag>(FGMRES<double, tag>(A, inner, {100, true}));
   auto solver = Restarted<double, tag>(A, solver_, {restart});
   const std::string solver_name = "F4";
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
   auto A16 = CSR<_Float16, tag>(A);
   auto A32 = CSR<float, tag>(A);
   auto F = FGMRES<float, tag>(A16, M, {8, false});
-  auto inner = FGMRES<double, tag>(A32, F, {8, false});
+  auto inner = FGMRES<float, tag>(A32, F, {8, false});
   auto solver_ = Solver<tag>(FGMRES<double, tag>(A, inner, {100, true}));
   auto solver = Restarted<double, tag>(A, solver_, {restart});
   const std::string solver_name = "F3";
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
   auto A16 = CSR<_Float16, tag>(A);
   auto A32 = CSR<float, tag>(A);
   auto F = FGMRES<_Float16, tag>(A16, M, {8, false});
-  auto inner = FGMRES<double, tag>(A32, F, {8, false});
+  auto inner = FGMRES<float, tag>(A32, F, {8, false});
   auto solver_ = Solver<tag>(FGMRES<double, tag>(A, inner, {100, true}));
   auto solver = Restarted<double, tag>(A, solver_, {restart});
   const std::string solver_name = "F3H";
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 
 #if defined(F2)
   auto A32 = CSR<float, tag>(A);
-  auto inner = FGMRES<double, tag>(A32, M, {16, false});
+  auto inner = FGMRES<float, tag>(A32, M, {64, false});
   auto solver_ = Solver<tag>(FGMRES<double, tag>(A, inner, {100, true}));
   auto solver = Restarted<double, tag>(A, solver_, {restart});
   const std::string solver_name = "F2";
@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
 
 #if defined(F2H)
   auto A16 = CSR<_Float16, tag>(A);
-  auto inner = FGMRES<_Float16, tag>(A16, M, {8, false});
+  auto inner = FGMRES<_Float16, tag>(A16, M, {64, false});
   auto solver_ = Solver<tag>(FGMRES<double, tag>(A, inner, {100, true}));
   auto solver = Restarted<double, tag>(A, solver_, {restart});
   const std::string solver_name = "F2H";

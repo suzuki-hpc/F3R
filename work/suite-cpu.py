@@ -79,16 +79,22 @@ import sys
 
 if __name__ == '__main__':
 	average = int(sys.argv[1])
-	# sample = int(sys.argv[2])
 
-	sym_results = T3C_SYM(average, len(symmetric))
+	if len(sys.argv) > 2:
+		parcent = int(sys.argv[2])
+	else:
+		parcent = 100
+	sym_sample = len(symmetric) * parcent // 100
+	gen_sample = len(general) * parcent // 100
+
+	sym_results = T3C_SYM(average, sym_sample)
 	with open("t3c-symmetric.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 		for res in sym_results:
 			if res != '\n':
 				f.write(res)
 
-	gen_results = T3C_GEN(average, len(general))
+	gen_results = T3C_GEN(average, gen_sample)
 	with open("t3c-general.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 		for res in gen_results:

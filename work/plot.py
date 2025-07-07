@@ -8,6 +8,7 @@ def figures1_2(name, savename):
 	df = pd.read_csv(name)
 	# Create Tag by concatenating Method (e.g., GMRES) and Prec (e.g., double)
 	df["Tag"] = df["Method"] + "-" + df["Prec"]
+	df = df.sort_values(by='Problem', ascending=True, kind='stable')
 
 	# Compute speedups over the base line fp64-F3R
 	base = df[df.Tag.eq("F3R-double")].set_index('Problem')['Time'].copy()
@@ -29,8 +30,22 @@ def figures1_2(name, savename):
 	sns.barplot(plot, hue='Tag', x='Problem', y='Speedup', palette=palette, edgecolor='black')
 
 	ax.set_xticklabels(ax.get_xticklabels(), rotation=40)
-	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+	handles, labels = ax.get_legend_handles_labels()
+	tags = {
+		"BiCGStab-double": "fp64-BiCGStab", "BiCGStab-float": "fp32-BiCGStab",
+		"BiCGStab-_Float16": "fp16-BiCGStab", "BiCGStab-__half": "fp16-BiCGStab",
+		"CG-double": "fp64-CG", "CG-float": "fp32-CG",
+		"CG-_Float16": "fp16-CG", "CG-__half": "fp16-CG",
+		"GMRES-double": "fp64-FGMRES(64)", "GMRES-float": "fp32-FGMRES(64)",
+		"GMRES-_Float16": "fp16-FGMRES(64)", "GMRES-__half": "fp16-FGMRES(64)",
+		"F3R-double": "fp64-F3R", "F3R-float": "fp32-F3R",
+		"F3R-_Float16": "fp16-F3R", "F3R-__half": "fp16-F3R", "F3R-Best": "fp16-F3R-best",
+	}
+	labels = [tags[x] for x in labels]
+	ax.legend(handles, labels, loc='center left', bbox_to_anchor=(1, 0.5))
 
+	ax.set_ylabel("Speedup over fp64-F3R")
+	ax.set_xlabel("")
 	ax.set_axisbelow(True)
 	ax.grid(True, axis='y')
 	ax.set_ylim(bottom=-0.05)
@@ -40,6 +55,7 @@ def figures1_2(name, savename):
 	plt.savefig(savename)
 
 def figure3(name, savename):
+	palette = ['#ffffcc','#a1dab4','#41b6c4','#2c7fb8','#253494']
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
 	df["Tag"] = df["M2"].astype(str) + "-" + df["M3"].astype(str) + "-" + df["M4"].astype(str)
@@ -58,9 +74,20 @@ def figure3(name, savename):
 	fig, axes = plt.subplots(1, 3, figsize=(12, 5))
 
 	sns.set_theme(style="ticks")
-	sns.scatterplot(a, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[0])
-	sns.scatterplot(b, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[1])
-	sns.scatterplot(c, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[2])
+	sns.scatterplot(a, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[0], style="Tag", palette=palette, edgecolor="black")
+	sns.scatterplot(b, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[1], style="Tag", palette=palette, edgecolor="black")
+	sns.scatterplot(c, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[2], style="Tag", palette=palette, edgecolor="black")
+
+	labels0 = [r'$m_4 = 1$', r'$m_4 = 3$', r'$m_4 = 4$']
+	labels1 = [r'$m_3 = 2$', r'$m_3 = 3$', r'$m_3 = 5$', r'$m_3 = 6$']
+	labels2 = [r'$m_2 = 6$', r'$m_2 = 7$', r'$m_2 = 9$', r'$m_2 = 10$']
+
+	handles0, _ = axes[0].get_legend_handles_labels()
+	axes[0].legend(handles0, labels0)
+	handles1, _ = axes[1].get_legend_handles_labels()
+	axes[1].legend(handles1, labels1)
+	handles2, _ = axes[2].get_legend_handles_labels()
+	axes[2].legend(handles2, labels2)
 
 	for ax in axes:
 		ax.set_xlim(-0.3, 1.8)
@@ -73,6 +100,7 @@ def figure3(name, savename):
 	plt.savefig(savename)
 
 def figure4(name, savename):
+	palette = ['#ffffcc','#a1dab4','#41b6c4','#2c7fb8','#253494']
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
 
@@ -89,7 +117,11 @@ def figure4(name, savename):
 	fig, ax = plt.subplots(1, 1, figsize=(5, 5))
 
 	sns.set_theme(style="ticks")
-	sns.scatterplot(sub, hue='Method', x='RelRate', y='RelSpeed', ax=ax)
+	sns.scatterplot(sub, hue='Method', x='RelRate', y='RelSpeed', ax=ax, style="Method", palette=palette, edgecolor="black")
+
+	labels = ['F2', 'fp16-F2', 'F3', 'fp16-F3', 'F4']
+	handles, _ = ax.get_legend_handles_labels()
+	ax.legend(handles, labels)
 
 	ax.set_xlim(-0.1, 1.8)
 	ax.set_ylim(-0.1, 1.8)
@@ -101,6 +133,7 @@ def figure4(name, savename):
 	plt.savefig(savename)
 
 def figure5(name, savename):
+	palette = ["#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#2c7fb8","#253494"]
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
 	df["W"] = df["W"].astype(str)
@@ -116,7 +149,11 @@ def figure5(name, savename):
 	fig, ax = plt.subplots(1, 1, figsize=(5, 5))
 
 	sns.set_theme(style="ticks")
-	sns.scatterplot(sub, hue='W', x='RelRate', y='RelSpeed', ax=ax)
+	sns.scatterplot(sub, hue='W', x='RelRate', y='RelSpeed', ax=ax, style="W", palette=palette, edgecolor="black")
+
+	labels = [r'$c=1$', r'$c=4$', r'$c=16$', r'$c=32$', r'$c=128$', r'$c=256$']
+	handles, _ = ax.get_legend_handles_labels()
+	ax.legend(handles, labels)
 
 	ax.set_xlim(-0.1, 1.8)
 	ax.set_ylim(-0.1, 1.8)
@@ -128,6 +165,9 @@ def figure5(name, savename):
 	plt.savefig(savename)
 
 def figure6(name, savename):
+	palette=[
+    "#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#0c2c84"
+	]
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
 	df["W"] = df["W"].astype(str)
@@ -143,15 +183,17 @@ def figure6(name, savename):
 	fig, axes = plt.subplots(2, 1, figsize=(12, 5))
 
 	sns.set_theme(style='ticks')
-	sns.barplot(sub, hue='W', x='Problem', y='RelSpeed', ax=axes[0])
-	sns.barplot(sub, hue='W', x='Problem', y='RelRate', ax=axes[1])
+	sns.barplot(sub, hue='W', x='Problem', y='RelSpeed', ax=axes[0], palette=palette, edgecolor="black")
+	sns.barplot(sub, hue='W', x='Problem', y='RelRate', ax=axes[1], palette=palette, edgecolor="black")
 
 	for ax in axes:
 		ax.set_axisbelow(True)
 		ax.grid(True)
 		ax.legend(ncol=7)
-		# ax.set_xlabel("Relative convergence speed")
-		# ax.set_ylabel("Relative performance")
+		ax.set_xlabel("")
+	
+	axes[0].set_ylabel("Performance")
+	axes[1].set_ylabel("Convergence speed")
 
 	plt.tight_layout()
 	plt.savefig(savename)
