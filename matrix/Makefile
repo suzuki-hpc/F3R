@@ -1,8 +1,7 @@
 CXX ?= icpx
 CXXFLAGS = -O3 -std=c++17
 
-# SIZES = 7_7_7 8_7_7 8_8_7 8_8_8
-SIZES = 7_7_7 8_7_7
+SIZES = 7_7_7 8_7_7 8_8_7 8_8_8
 
 all: $(foreach s,$(SIZES),hpcg_$(s).mtx hpgmp_$(s).mtx)
 

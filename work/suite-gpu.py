@@ -1,31 +1,29 @@
 import subprocess
-import random
 
 symmetric=[
 	# [matrix, alpha], [params for F3R-best]
-	[["Bump_2911.mtx", "1.2"],  ["8","6","2"]],
-	[["Emilia_923.mtx", "1.2"], ["8","5","2"]],
-	[["G3_circuit.mtx", "1.0"], ["9","4","2"]],
-	[["Queen_4147.mtx", "1.3"], ["10","4","2"]],
-	[["Serena.mtx", "1.2"],     ["7","4","2"]],
 	[["apache2.mtx", "1.0"],    ["8","4","2"]],
 	[["audikw_1.mtx", "1.6"],   ["8","6","2"]],
+	[["Bump_2911.mtx", "1.2"],  ["8","6","2"]],
 	[["ecology2.mtx", "1.0"],   ["8","5","2"]],
+	[["Emilia_923.mtx", "1.2"], ["8","5","2"]],
+	[["G3_circuit.mtx", "1.0"], ["9","4","2"]],
 	[["hpcg_7_7_7.mtx", "1.0"], ["8","6","2"]],
 	[["hpcg_8_7_7.mtx", "1.0"], ["8","3","2"]],
 	[["hpcg_8_8_7.mtx", "1.0"], ["6","4","2"]],
 	[["hpcg_8_8_8.mtx", "1.0"], ["6","4","2"]],
 	[["ldoor.mtx", "1.3"],      ["8","6","2"]],
+	[["Queen_4147.mtx", "1.3"], ["10","4","2"]],
+	[["Serena.mtx", "1.2"],     ["7","4","2"]],
 	[["thermal2.mtx", "1.0"],   ["10","4","2"]],
 	[["tmt_sym.mtx", "1.0"],    ["8","6","2"]],
 ]
 
 general=[
-	[["Freescale1.mtx", "1.1"],    ["9","4","2"]],
-	[["Transport.mtx", "1.0"],   	 ["9","4","2"]],
 	[["atmosmodd.mtx", "1.0"],   	 ["8","2","2"]],
 	[["atmosmodj.mtx", "1.0"],   	 ["8","2","2"]],
 	[["atmosmodl.mtx", "1.0"],   	 ["8","6","2"]],
+	[["Freescale1.mtx", "1.1"],    ["9","4","2"]],
 	[["hpgmp_7_7_7.mtx", "1.0"], 	 ["8","2","2"]],
 	[["hpgmp_8_7_7.mtx", "1.0"], 	 ["6","4","2"]],
 	[["hpgmp_8_8_7.mtx", "1.0"], 	 ["8","2","2"]],
@@ -34,6 +32,7 @@ general=[
 	[["stokes.mtx", "1.3"],        ["8","4","1"]],
 	[["t2em.mtx", "1.0"],          ["9","4","2"]],
 	[["tmt_unsym.mtx", "1.0"],     ["8","5","2"]],
+	[["Transport.mtx", "1.0"],   	 ["9","4","2"]],
 	[["vas_stokes_1M.mtx", "1.3"], ["8","4","1"]],
 	[["vas_stokes_2M.mtx", "1.3"], ["8","4","1"]],
 	[["rajat31.mtx", "1.0"],       ["8","4","1"]],
@@ -74,19 +73,20 @@ def T3G_GEN(ave, data):
 import sys
 
 if __name__ == '__main__':
-	random.seed()
 	average = int(sys.argv[1])
 
 	if len(sys.argv) > 2:
-		parcent = int(sys.argv[2])
+		if sys.argv[2] == "quick":
+			step=2
+		else:
+			print("argv[2] should be quick")
+			exit(1)
 	else:
-		parcent = 100
-	sym_sample = len(symmetric) * parcent // 100
-	gen_sample = len(general) * parcent // 100
+		step=1
 
 	with open("t3g-symmetric.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(symmetric, sym_sample):
+		for data in symmetric[::step]:
 			sym_results = T3G_SYM(average, data)
 			for res in sym_results:
 				if res != '\n':
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
 	with open("t3g-general.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(general, gen_sample):
+		for data in general[::step]:
 			gen_results = T3G_GEN(average, data)
 			for res in gen_results:
 				if res != '\n':

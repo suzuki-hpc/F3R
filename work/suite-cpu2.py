@@ -1,24 +1,22 @@
 import subprocess
-import random
 
 policy = ["numactl", "--interleave=all"]
 
 matrices=[
+	[["audikw_1.mtx", "1.1"],   ["7","4","2"]],
 	[["Bump_2911.mtx", "1.1"],  ["8","5","2"]],
+	[["ecology2.mtx", "1.0"],   ["8","5","2"]],
 	[["Emilia_923.mtx", "1.0"], ["8","5","2"]],
 	[["G3_circuit.mtx", "1.0"], ["9","4","2"]],
-	[["Queen_4147.mtx", "1.1"], ["8","4","2"]],
-	[["Serena.mtx", "1.1"],     ["8","6","2"]],
-	[["audikw_1.mtx", "1.1"],   ["7","4","2"]],
-	[["ecology2.mtx", "1.0"],   ["8","5","2"]],
 	[["hpcg_7_7_7.mtx", "1.0"], ["9","4","2"]],
 	[["hpcg_8_7_7.mtx", "1.0"], ["6","4","2"]],
 	[["hpcg_8_8_7.mtx", "1.0"], ["7","4","2"]],
 	[["hpcg_8_8_8.mtx", "1.0"], ["6","4","2"]],
 	[["ldoor.mtx", "1.1"],      ["8","5","2"]],
+	[["Queen_4147.mtx", "1.1"], ["8","4","2"]],
+	[["Serena.mtx", "1.1"],     ["8","6","2"]],
 	[["thermal2.mtx", "1.0"],   ["9","4","2"]],
 	[["tmt_sym.mtx", "1.0"],    ["8","6","2"]],
-	[["Transport.mtx", "1.0"],   	 ["8","3","2"]],
 	[["atmosmodd.mtx", "1.0"],   	 ["8","6","2"]],
 	[["atmosmodj.mtx", "1.0"],   	 ["9","4","2"]],
 	[["atmosmodl.mtx", "1.0"],   	 ["8","3","2"]],
@@ -30,6 +28,7 @@ matrices=[
 	[["stokes.mtx", "1.0"],        ["8","4","1"]],
 	[["t2em.mtx", "1.0"],          ["6","4","2"]],
 	[["tmt_unsym.mtx", "1.0"],     ["10","4","2"]],
+	[["Transport.mtx", "1.0"],   	 ["8","3","2"]],
 	[["vas_stokes_1M.mtx", "1.0"], ["8","4","1"]],
 	[["vas_stokes_2M.mtx", "1.0"], ["8","4","1"]],
 ]
@@ -87,19 +86,20 @@ def T3CP(ave, data, switch):
 import sys
 
 if __name__ == '__main__':
-	random.seed()
 	average = int(sys.argv[1])
-	# sample = int(sys.argv[2])
 
 	if len(sys.argv) > 2:
-		parcent = int(sys.argv[2])
+		if sys.argv[2] == "quick":
+			step=3
+		else:
+			print("argv[2] should be quick")
+			exit(1)
 	else:
-		parcent = 100
-	sample = len(matrices) * parcent // 100
+		step=1
 
 	with open("t3cp-figure3.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(matrices, sample):
+		for data in matrices[::step]:
 			results = T3CP(average, data, 3)
 			for res in results:
 				if res != '\n':
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
 	with open("t3cp-figure4.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(matrices, sample):
+		for data in matrices[::step]:
 			results = T3CP(average, data, 4)
 			for res in results:
 				if res != '\n':
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 
 	with open("t3cp-figure5.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(matrices, sample):
+		for data in matrices[::step]:
 			results = T3CP(average, data, 5)
 			for res in results:
 				if res != '\n':
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
 	with open("t3cp-figure6.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in random.sample(matrices, sample):
+		for data in matrices[::step]:
 			results = T3CP(average, data, 6)
 			for res in results:
 				if res != '\n':
