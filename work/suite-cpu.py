@@ -37,42 +37,36 @@ general=[
 	[["vas_stokes_2M.mtx", "1.0"], ["8","4","1"]],
 ]
 
-def T3C_SYM(ave, num):
+def T3C_SYM(ave, data):
 	sym_bins = [
 		"./bin/cg64.exe", "./bin/cg32.exe", "./bin/cg16.exe",
 		"./bin/gm64.exe", "./bin/gm32.exe", "./bin/gm16.exe",
 		"./bin/f3r64.exe", "./bin/f3r32.exe", "./bin/f3r16.exe",
 	]
-
 	sym_results = []
-	for data in random.sample(symmetric, num):
-		for b in sym_bins:
-			add = ["8", "4", "2", "64", "3"] if 'f3r' in b else []
-			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-			sym_results.append(result.stdout)
-		add = data[1] + ["64", "3"]
-		result = subprocess.run(policy+[sym_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-		sym_results.append(result.stdout.replace('_Float16', 'Best'))
-
+	for b in sym_bins:
+		add = ["8", "4", "2", "64", "3"] if 'f3r' in b else []
+		result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+		sym_results.append(result.stdout)
+	add = data[1] + ["64", "3"]
+	result = subprocess.run(policy+[sym_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+	sym_results.append(result.stdout.replace('_Float16', 'Best'))
 	return sym_results
 
-def T3C_GEN(ave, num):
+def T3C_GEN(ave, data):
 	gen_bins = [
 		"./bin/bicg64.exe", "./bin/bicg32.exe", "./bin/bicg16.exe",
 		"./bin/gm64.exe", "./bin/gm32.exe", "./bin/gm16.exe",
 		"./bin/f3r64.exe", "./bin/f3r32.exe", "./bin/f3r16.exe",
 	]
-
 	gen_results = []
-	for data in random.sample(general, num):
-		for b in gen_bins:
-			add = ["8", "4", "2", "64", "3"] if 'f3r' in b else []
-			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-			gen_results.append(result.stdout)
-		add = data[1] + ["64", "3"]
-		result = subprocess.run(policy+[gen_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-		gen_results.append(result.stdout.replace('_Float16', 'Best'))
-		
+	for b in gen_bins:
+		add = ["8", "4", "2", "64", "3"] if 'f3r' in b else []
+		result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+		gen_results.append(result.stdout)
+	add = data[1] + ["64", "3"]
+	result = subprocess.run(policy+[gen_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+	gen_results.append(result.stdout.replace('_Float16', 'Best'))	
 	return gen_results
 
 import sys
@@ -88,16 +82,20 @@ if __name__ == '__main__':
 	sym_sample = len(symmetric) * parcent // 100
 	gen_sample = len(general) * parcent // 100
 
-	sym_results = T3C_SYM(average, sym_sample)
 	with open("t3c-symmetric.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in sym_results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(symmetric, sym_sample):
+			sym_results = T3C_SYM(average, data)
+			for res in sym_results:
+				if res != '\n':
+					f.write(res)
+			f.flush()
 
-	gen_results = T3C_GEN(average, gen_sample)
 	with open("t3c-general.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in gen_results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(general, gen_sample):
+			gen_results = T3C_GEN(average, data)
+			for res in gen_results:
+				if res != '\n':
+					f.write(res)
+			f.flush()

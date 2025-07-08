@@ -34,7 +34,7 @@ matrices=[
 	[["vas_stokes_2M.mtx", "1.0"], ["8","4","1"]],
 ]
 
-def T3CP(ave, num, switch):
+def T3CP(ave, data, switch):
 	results = []
 	if switch == 3: # For figure 3
 		exe = "./bin/f3r16.exe"
@@ -43,11 +43,10 @@ def T3CP(ave, num, switch):
 			["8","2","2"], ["8","3","2"], ["8","5","2"], ["8","6","2"],
 			["6","4","2"], ["7","4","2"], ["9","4","2"], ["10","4","2"]
 		]
-		for data in random.sample(matrices, num):
-			for p in params:
-				add = p + ["64", "3"]
-				result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-				results.append(result.stdout)
+		for p in params:
+			add = p + ["64", "3"]
+			result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+			results.append(result.stdout)
 	
 	if switch == 4: # For figure 4
 		exes = [
@@ -56,35 +55,32 @@ def T3CP(ave, num, switch):
 			"./bin/f3.exe", './bin/f3h.exe',
 			"./bin/f4.exe"
 		]
-		for data in random.sample(matrices, num):
-			for b in exes:
-				add = None
-				if 'f3r' in b:
-					add = ["8", "4", "2", "64", "3"]
-				else:
-					add = ["0", "0", "0", "0", "3"]
-				result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-				results.append(result.stdout)
+		for b in exes:
+			add = None
+			if 'f3r' in b:
+				add = ["8", "4", "2", "64", "3"]
+			else:
+				add = ["0", "0", "0", "0", "3"]
+			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+			results.append(result.stdout)
 
 	if switch == 5: # For figure 5
 		exe = "./bin/f3r16.exe"
 		params = ["1", "4", "16", "32", "64", "128", "256"]
-		for data in random.sample(matrices, num):
-			for p in params:
-				add = ["8","4","2"] + [p] + ["3"]
-				result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-				results.append(result.stdout)
+		for p in params:
+			add = ["8","4","2"] + [p] + ["3"]
+			result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+			results.append(result.stdout)
 
 	if switch == 6: # For figure 6
 		exe = "./bin/static.exe"
 		params = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3"]
-		for data in random.sample(matrices, num):
-			result = subprocess.run(policy+["./bin/f3r16.exe"]+data[0]+[str(ave)]+["8","4","2","64","3"], capture_output=True, text=True)
+		result = subprocess.run(policy+["./bin/f3r16.exe"]+data[0]+[str(ave)]+["8","4","2","64","3"], capture_output=True, text=True)
+		results.append(result.stdout)
+		for p in params:
+			add = ["8","4","2","0","3"] + [p]
+			result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			results.append(result.stdout)
-			for p in params:
-				add = ["8","4","2","0","3"] + [p]
-				result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
-				results.append(result.stdout)
 	
 	return results
 
@@ -101,31 +97,39 @@ if __name__ == '__main__':
 		parcent = 100
 	sample = len(matrices) * parcent // 100
 
-	results = T3CP(average, sample, 3)
 	with open("t3cp-figure3.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(matrices, sample):
+			results = T3CP(average, data, 3)
+			for res in results:
+				if res != '\n':
+					f.write(res)
+			f.flush()
 
-	results = T3CP(average, sample, 4)
 	with open("t3cp-figure4.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(matrices, sample):
+			results = T3CP(average, data, 4)
+			for res in results:
+				if res != '\n':
+					f.write(res)
+			f.flush()
 
-	results = T3CP(average, sample, 5)
 	with open("t3cp-figure5.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(matrices, sample):
+			results = T3CP(average, data, 5)
+			for res in results:
+				if res != '\n':
+					f.write(res)
+			f.flush()
 
-	results = T3CP(average, sample, 6)
 	with open("t3cp-figure6.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for res in results:
-			if res != '\n':
-				f.write(res)
+		for data in random.sample(matrices, sample):
+			results = T3CP(average, data, 6)
+			for res in results:
+				if res != '\n':
+					f.write(res)
+			f.flush()
 				

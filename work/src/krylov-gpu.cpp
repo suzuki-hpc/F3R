@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
   impl::pool<double, tag>::init(A.nrows());
 
   auto [z, w] = algorithm::sdainv(data, 0.1, acc);
+  auto na = CSR<double, host>({1,1},1);
 
   auto test = [&A, &x, &r, &suite_iter](
     auto solver, auto b, auto &t, bool ff, int &itr_sum, int ww=1)
@@ -107,6 +108,8 @@ int main(int argc, char *argv[]) {
 
   auto W = SELL<32, precond_type, tag>(w);
   auto Z = SELL<32, precond_type, tag>(z);
+  w = na;
+  z = na;
   auto tmp = vector<double, tag>(A.nrows());
   auto M = Operator<tag>(A.get_shape(), [&W, &Z, &tmp](auto in, auto out) {
     W.operate(in, tmp);

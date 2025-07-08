@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 
   auto _name = std::string(argv[1]);
   auto name = _name.substr(0, _name.size() - 4);
-  auto precond = std::string("BJILU0,") + argv[2] + ",";
+  auto precond = precond_name + "," + argv[2] + ",";
 
   auto [coo, rhs] = io::mm::read_system(path, [](vector<double, host> v) { v.random<0, 1>(std::mt19937_64(0)); });
   auto data = CSR<double, host>(io::CSR(coo));
@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
   impl::pool<double, tag>::init(A.nrows());
 
   auto [z, w] = algorithm::sdainv(data, 0.1, acc);
+  auto na = CSR<double, host>({1,1},1);
 
   auto test = [&A, &x, &r, &suite_iter](
     auto solver, auto b, auto &t, bool ff, int &itr_sum, int ww)
@@ -110,6 +111,8 @@ int main(int argc, char *argv[]) {
   scalar<double, tag> dot_ar, dot_r;
   auto W = SELL<32, double, tag>(w);
   auto Z = SELL<32, double, tag>(z);
+  w = na;
+  z = na;
   auto tmp = vector<double, tag>(data.nrows());
   auto tmp2 = vector<double, tag>(data.nrows());
   auto hr = vector<double, tag>(data.nrows());
@@ -159,6 +162,8 @@ int main(int argc, char *argv[]) {
   scalar<float, tag> dot_ar, dot_r;
   auto W = SELL<32, float, tag>(w);
   auto Z = SELL<32, float, tag>(z);
+  w = na;
+  z = na;
   auto tmp = vector<float, tag>(data.nrows());
   auto tmp2 = vector<float, tag>(data.nrows());
   auto hr = vector<float, tag>(data.nrows());
@@ -209,6 +214,8 @@ int main(int argc, char *argv[]) {
   auto A16 = SELL<32, __half, tag>(A);
   auto W = SELL<32, __half, tag>(w);
   auto Z = SELL<32, __half, tag>(z);
+  w = na;
+  z = na;
   auto tmp = vector<__half, tag>(data.nrows());
   auto tmp2 = vector<__half, tag>(data.nrows());
   auto hin = vector<__half, tag>(data.nrows());
