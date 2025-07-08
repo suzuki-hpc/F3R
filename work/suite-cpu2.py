@@ -116,14 +116,14 @@ if __name__ == '__main__':
 				f.write(res)
 
 	results = T3CP(average, sample, 5)
-	with open("t3cp-figure4.csv", mode="w") as f:
+	with open("t3cp-figure5.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 		for res in results:
 			if res != '\n':
 				f.write(res)
 
 	results = T3CP(average, sample, 6)
-	with open("t3cp-figure4.csv", mode="w") as f:
+	with open("t3cp-figure6.csv", mode="w") as f:
 		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 		for res in results:
 			if res != '\n':
