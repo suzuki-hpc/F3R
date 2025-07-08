@@ -79,7 +79,7 @@ def T3CP(ave, num, switch):
 		exe = "./bin/static.exe"
 		params = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3"]
 		for data in random.sample(matrices, num):
-			result = subprocess.run(["./bin/f3r16.exe"]+data[0]+[str(ave)]+["8","4","2","64","3"], capture_output=True, text=True)
+			result = subprocess.run(policy+["./bin/f3r16.exe"]+data[0]+[str(ave)]+["8","4","2","64","3"], capture_output=True, text=True)
 			results.append(result.stdout)
 			for p in params:
 				add = ["8","4","2","0","3"] + [p]
@@ -91,6 +91,7 @@ def T3CP(ave, num, switch):
 import sys
 
 if __name__ == '__main__':
+	random.seed()
 	average = int(sys.argv[1])
 	# sample = int(sys.argv[2])
 

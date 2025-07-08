@@ -1,8 +1,8 @@
 CXX ?= nvc++
 INCLUDE := -I ../library
 OPTIONS := -std=c++17 -O3 -fopenmp -cuda
-# OPTIONS := -std=c++17 -O3 -fopenmp
 EXECDIR := bin
+CLEAN_EXES := $(wildcard bin/*.exe)
 
 all: $(EXECDIR) bicg cg gmres f3r
 
@@ -52,4 +52,4 @@ $(EXECDIR):
 
 .PHONY: clean
 clean:
-	rm *.exe
+	rm $(CLEAN_EXES)

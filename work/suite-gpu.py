@@ -79,6 +79,7 @@ def T3G_GEN(ave, num):
 import sys
 
 if __name__ == '__main__':
+	random.seed()
 	average = int(sys.argv[1])
 
 	if len(sys.argv) > 2:

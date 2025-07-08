@@ -51,7 +51,7 @@ def T3C_SYM(ave, num):
 			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			sym_results.append(result.stdout)
 		add = data[1] + ["64", "3"]
-		result = subprocess.run([sym_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+		result = subprocess.run(policy+[sym_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 		sym_results.append(result.stdout.replace('_Float16', 'Best'))
 
 	return sym_results
@@ -67,10 +67,10 @@ def T3C_GEN(ave, num):
 	for data in random.sample(general, num):
 		for b in gen_bins:
 			add = ["8", "4", "2", "64", "3"] if 'f3r' in b else []
-			result = subprocess.run([b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			gen_results.append(result.stdout)
 		add = data[1] + ["64", "3"]
-		result = subprocess.run([gen_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+		result = subprocess.run(policy+[gen_bins[-1]]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 		gen_results.append(result.stdout.replace('_Float16', 'Best'))
 		
 	return gen_results
@@ -78,6 +78,7 @@ def T3C_GEN(ave, num):
 import sys
 
 if __name__ == '__main__':
+	random.seed()
 	average = int(sys.argv[1])
 
 	if len(sys.argv) > 2:

@@ -1,8 +1,8 @@
 CXX ?= icpx
 INCLUDE := -I ../library
-# OPTIONS := -std=c++17 -fast -qopenmp -xCORE-AVX512 -mavx512fp16 -qnextgen
-OPTIONS := -std=c++17 -O3 -fopenmp
+OPTIONS := -std=c++17 -fast -qopenmp -xCORE-AVX512 -mavx512fp16 -qnextgen
 EXECDIR := bin
+CLEAN_EXES := $(filter-out bin/*-gpu.exe,$(wildcard bin/*.exe))
 
 all: $(EXECDIR) bicg cg gmres f3r depth $(EXECDIR)/static.exe
 
@@ -64,11 +64,11 @@ $(EXECDIR)/f2h.exe: src/depth.cpp
 	$(CXX) -DF2H -DTYPE=_Float16 $(OPTIONS) $(INCLUDE) $^ -o $@
 
 $(EXECDIR)/static.exe: src/static.cpp
-	$(CXX) -DF2H -DTYPE=_Float16 $(OPTIONS) $(INCLUDE) $^ -o $@
+	$(CXX) -DTYPE=_Float16 $(OPTIONS) $(INCLUDE) $^ -o $@
 
 $(EXECDIR):
 	mkdir -p $(EXECDIR)
 
 .PHONY: clean
 clean:
-	rm *.exe
+	rm $(CLEAN_EXES)
