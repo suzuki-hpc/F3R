@@ -1,5 +1,7 @@
 # F3R: A Mixed-Precision Linear Solver
 
+[![DOI](https://zenodo.org/badge/967353937.svg)](https://doi.org/10.5281/zenodo.15849269)
+
 This repository contains the software artifact accompanying a research paper currently under review.
 
 ##### Preprint:
