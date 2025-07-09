@@ -141,7 +141,7 @@ python suite-gpu.py <average> figure2a full
 python suite-gpu.py <average> figure2b full
 ```
 
-### Result Visualization (T4)
+### Visualize Results (T4)
 
 After execution, numerical results will be stored as CSV in the `work` directory. To generate a table and figures corresponding to the paper:
 
