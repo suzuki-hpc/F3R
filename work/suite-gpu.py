@@ -84,7 +84,7 @@ if __name__ == '__main__':
 	else:
 		step=2
 
-	if argv[2] == "figure2a":
+	if sys.argv[2] == "figure2a":
 		with open("t3g-figure2a.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in symmetric[::step]:
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 						f.write(res)
 				f.flush()
 
-	if argv[2] == "figure2b":
+	if sys.argv[2] == "figure2b":
 		with open("t3g-figure2b.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in general[::step]:

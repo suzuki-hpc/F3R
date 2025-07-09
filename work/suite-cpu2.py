@@ -97,7 +97,7 @@ if __name__ == '__main__':
 	else:
 		step=3
 
-	if argv[2] == "figure3":
+	if sys.argv[2] == "figure3":
 		with open("t3c-figure3.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
@@ -107,7 +107,7 @@ if __name__ == '__main__':
 						f.write(res)
 				f.flush()
 
-	if argv[2] == "figure4":
+	if sys.argv[2] == "figure4":
 		with open("t3c-figure4.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 						f.write(res)
 				f.flush()
 
-	if argv[2] == "figure5":
+	if sys.argv[2] == "figure5":
 		with open("t3c-figure5.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
@@ -127,7 +127,7 @@ if __name__ == '__main__':
 						f.write(res)
 				f.flush()
 
-	if argv[2] == "figure6":
+	if sys.argv[2] == "figure6":
 		with open("t3c-figure6.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
