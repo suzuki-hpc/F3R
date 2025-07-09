@@ -29,7 +29,8 @@ def figures1_2(name, savename):
 	sns.set_theme(style="ticks")
 	sns.barplot(plot, hue='Tag', x='Problem', y='Speedup', palette=palette, edgecolor='black')
 
-	ax.set_xticklabels(ax.get_xticklabels(), rotation=40)
+	# ax.set_xticklabels(ax.get_xticklabels(), rotation=40)
+
 	handles, labels = ax.get_legend_handles_labels()
 	tags = {
 		"BiCGStab-double": "fp64-BiCGStab", "BiCGStab-float": "fp32-BiCGStab",
@@ -50,12 +51,14 @@ def figures1_2(name, savename):
 	ax.grid(True, axis='y')
 	ax.set_ylim(bottom=-0.05)
 
+	plt.xticks(rotation=40)
 	plt.tight_layout()
 	# plt.show()
 	plt.savefig(savename)
 
 def figure3(name, savename):
-	palette = ['#ffffcc','#a1dab4','#41b6c4','#2c7fb8','#253494']
+	palette3 = ['#edf8b1','#7fcdbb','#2c7fb8']
+	palette4 = ['#ffffcc','#a1dab4','#41b6c4','#225ea8']
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
 	df["Tag"] = df["M2"].astype(str) + "-" + df["M3"].astype(str) + "-" + df["M4"].astype(str)
@@ -74,9 +77,9 @@ def figure3(name, savename):
 	fig, axes = plt.subplots(1, 3, figsize=(12, 5))
 
 	sns.set_theme(style="ticks")
-	sns.scatterplot(a, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[0], style="Tag", palette=palette, edgecolor="black")
-	sns.scatterplot(b, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[1], style="Tag", palette=palette, edgecolor="black")
-	sns.scatterplot(c, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[2], style="Tag", palette=palette, edgecolor="black")
+	sns.scatterplot(a, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[0], style="Tag", palette=palette3, edgecolor="black")
+	sns.scatterplot(b, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[1], style="Tag", palette=palette4, edgecolor="black")
+	sns.scatterplot(c, hue='Tag', x='RelRate', y='RelSpeed', ax=axes[2], style="Tag", palette=palette4, edgecolor="black")
 
 	labels0 = [r'$m_4 = 1$', r'$m_4 = 3$', r'$m_4 = 4$']
 	labels1 = [r'$m_3 = 2$', r'$m_3 = 3$', r'$m_3 = 5$', r'$m_3 = 6$']
@@ -245,5 +248,3 @@ if __name__ == '__main__':
 
 	if sys.argv[1] == "table":
 		table("t3c-figure1a.csv", "t3c-figure1b.csv")
-
-
