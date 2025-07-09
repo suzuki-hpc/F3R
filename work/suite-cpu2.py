@@ -88,48 +88,52 @@ import sys
 if __name__ == '__main__':
 	average = int(sys.argv[1])
 
-	if len(sys.argv) > 2:
-		if sys.argv[2] == "quick":
-			step=3
+	if len(sys.argv) > 3:
+		if sys.argv[3] == "full":
+			step=1
 		else:
-			print("argv[2] should be quick")
+			print("argv[3] must be full")
 			exit(1)
 	else:
-		step=1
+		step=3
 
-	with open("t3cp-figure3.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in matrices[::step]:
-			results = T3CP(average, data, 3)
-			for res in results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure3":
+		with open("t3c-figure3.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in matrices[::step]:
+				results = T3CP(average, data, 3)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
 
-	with open("t3cp-figure4.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in matrices[::step]:
-			results = T3CP(average, data, 4)
-			for res in results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure4":
+		with open("t3c-figure4.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in matrices[::step]:
+				results = T3CP(average, data, 4)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
 
-	with open("t3cp-figure5.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in matrices[::step]:
-			results = T3CP(average, data, 5)
-			for res in results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure5":
+		with open("t3c-figure5.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in matrices[::step]:
+				results = T3CP(average, data, 5)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
 
-	with open("t3cp-figure6.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in matrices[::step]:
-			results = T3CP(average, data, 6)
-			for res in results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure6":
+		with open("t3c-figure6.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in matrices[::step]:
+				results = T3CP(average, data, 6)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
 				

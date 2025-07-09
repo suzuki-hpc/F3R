@@ -73,29 +73,31 @@ import sys
 if __name__ == '__main__':
 	average = int(sys.argv[1])
 
-	if len(sys.argv) > 2:
-		if sys.argv[2] == "quick":
-			step=3
+	if len(sys.argv) > 3:
+		if sys.argv[3] == "full":
+			step=1
 		else:
-			print("argv[2] should be quick")
+			print("argv[3] must be full")
 			exit(1)
 	else:
-		step=1
+		step=3
 
-	with open("t3c-symmetric.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in symmetric[::step]:
-			sym_results = T3C_SYM(average, data)
-			for res in sym_results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure1a":
+		with open("t3c-figure1a.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in symmetric[::step]:
+				sym_results = T3C_SYM(average, data)
+				for res in sym_results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
 
-	with open("t3c-general.csv", mode="w") as f:
-		f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-		for data in general[::step]:
-			gen_results = T3C_GEN(average, data)
-			for res in gen_results:
-				if res != '\n':
-					f.write(res)
-			f.flush()
+	if argv[2] == "figure1b":
+		with open("t3c-figure1b.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in general[::step]:
+				gen_results = T3C_GEN(average, data)
+				for res in gen_results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
