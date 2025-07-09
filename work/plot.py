@@ -217,34 +217,33 @@ def table(name1, name2):
 	df = df[cg | bi | gm | f3r][col]
 	df["Iter"] = df["Iter"].astype('Int64')
 	table = df.pivot(index='Problem', columns='Tag', values='Iter')
-	table = table[['CG-double', 'BiCGStab-double', 'GMRES-double', 'F3R-double', 'F3R-float', 'F3R-_Float16']]
-
-	table.to_string('table.txt', index=False)
+	ta = table[['CG-double', 'BiCGStab-double', 'GMRES-double', 'F3R-double', 'F3R-float', 'F3R-_Float16']].reset_index()
+	ta.to_string('table.txt', index=False)
 
 import sys
 
 if __name__ == '__main__':
 	if sys.argv[1] == "1":
-		figures1_2("t3c-symmetric.csv", "figure1a.pdf")
-		figures1_2("t3c-general.csv", "figure1b.pdf")
+		figures1_2("t3c-figure1a.csv", "figure1a.pdf")
+		figures1_2("t3c-figure1b.csv", "figure1b.pdf")
 
 	if sys.argv[1] == "2":
-		figures1_2("t3g-symmetric.csv", "figure2a.pdf")
-		figures1_2("t3g-general.csv", "figure2b.pdf")
+		figures1_2("t3g-figure2a.csv", "figure2a.pdf")
+		figures1_2("t3g-figure2b.csv", "figure2b.pdf")
 
 	if sys.argv[1] == "3":
-		figure3("t3cp-figure3.csv", "figure3.pdf")
+		figure3("t3c-figure3.csv", "figure3.pdf")
 
 	if sys.argv[1] == "4":
-		figure4("t3cp-figure4.csv", "figure4.pdf")
+		figure4("t3c-figure4.csv", "figure4.pdf")
 
 	if sys.argv[1] == "5":
-		figure5("t3cp-figure5.csv", "figure5.pdf")
+		figure5("t3c-figure5.csv", "figure5.pdf")
 
 	if sys.argv[1] == "6":
-		figure6("t3cp-figure6.csv", "figure6.pdf")
+		figure6("t3c-figure6.csv", "figure6.pdf")
 
 	if sys.argv[1] == "table":
-		table("t3c-symmetric.csv", "t3c-general.csv")
+		table("t3c-figure1a.csv", "t3c-figure1b.csv")
 
 
