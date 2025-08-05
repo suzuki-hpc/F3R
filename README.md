@@ -1,8 +1,6 @@
 # F3R: A Mixed-Precision Linear Solver
 
-[![DOI](https://zenodo.org/badge/967353937.svg)](https://doi.org/10.5281/zenodo.15849269)
-
-This repository contains the software artifact accompanying a research paper currently under review.
+This repository contains the software artifact accompanying the following research paper.
 
 ##### Preprint:
 
@@ -40,7 +38,7 @@ pip install -r requirements.txt
 ##### 1. Clone the repository
 
 ```bash
-git clone https://github.com/suzuki-hpc/F3R.git
+git clone https://github.com/suzuki-hpc/F3R.git -b v1.0.1
 cd F3R
 ```
 
