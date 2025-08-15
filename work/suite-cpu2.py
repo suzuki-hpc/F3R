@@ -63,7 +63,7 @@ def T3CP(ave, data, switch):
 			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			results.append(result.stdout)
 
-	if switch == 5: # For figure 5
+	if switch == 6: # For figure 6
 		exe = "./bin/f3r16.exe"
 		params = ["1", "4", "16", "32", "64", "128", "256"]
 		for p in params:
@@ -71,7 +71,7 @@ def T3CP(ave, data, switch):
 			result = subprocess.run(policy+[exe]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			results.append(result.stdout)
 
-	if switch == 6: # For figure 6
+	if switch == 7: # For figure 7
 		exe = "./bin/static.exe"
 		params = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3"]
 		result = subprocess.run(policy+["./bin/f3r16.exe"]+data[0]+[str(ave)]+["8","4","2","64","3"], capture_output=True, text=True)
@@ -117,21 +117,21 @@ if __name__ == '__main__':
 						f.write(res)
 				f.flush()
 
-	if sys.argv[2] == "figure5":
-		with open("t3c-figure5.csv", mode="w") as f:
-			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
-			for data in matrices[::step]:
-				results = T3CP(average, data, 5)
-				for res in results:
-					if res != '\n':
-						f.write(res)
-				f.flush()
-
 	if sys.argv[2] == "figure6":
 		with open("t3c-figure6.csv", mode="w") as f:
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
 				results = T3CP(average, data, 6)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
+
+	if sys.argv[2] == "figure7":
+		with open("t3c-figure7.csv", mode="w") as f:
+			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
+			for data in matrices[::step]:
+				results = T3CP(average, data, 7)
 				for res in results:
 					if res != '\n':
 						f.write(res)

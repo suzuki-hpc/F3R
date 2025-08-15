@@ -135,7 +135,7 @@ def figure4(name, savename):
 	plt.tight_layout()
 	plt.savefig(savename)
 
-def figure5(name, savename):
+def figure6(name, savename):
 	palette = ["#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#2c7fb8","#253494"]
 	# Read results as a pands DataFrame object
 	df = pd.read_csv(name)
@@ -167,7 +167,7 @@ def figure5(name, savename):
 	plt.tight_layout()
 	plt.savefig(savename)
 
-def figure6(name, savename):
+def figure7(name, savename):
 	palette=[
     "#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#0c2c84"
 	]
@@ -201,7 +201,7 @@ def figure6(name, savename):
 	plt.tight_layout()
 	plt.savefig(savename)
 
-def table(name1, name2):
+def table3(name1, name2):
 	# Read results as a pands DataFrame object
 	df1 = pd.read_csv(name1)
 	df2 = pd.read_csv(name2)
@@ -209,6 +209,7 @@ def table(name1, name2):
 	df = pd.concat([df1, df2])
 	df["Tag"] = df["Method"] + "-" + df["Prec"]
 	df['Iter'] = df.apply(lambda row: np.nan if row['ImplRes'] > 1.e-8 else row["Iter"], axis = 1)
+	df['Iter'] = df.apply(lambda row: np.nan if np.isnan(row['ImplRes']) else row["Iter"], axis = 1)
 
 	cg = df.Tag.eq("CG-double")
 	bi = df.Tag.eq("BiCGStab-double")
@@ -221,7 +222,30 @@ def table(name1, name2):
 	df["Iter"] = df["Iter"].astype('Int64')
 	table = df.pivot(index='Problem', columns='Tag', values='Iter')
 	ta = table[['CG-double', 'BiCGStab-double', 'GMRES-double', 'F3R-double', 'F3R-float', 'F3R-_Float16']].reset_index()
-	ta.to_string('table.txt', index=False)
+	ta.to_string('table3.txt', index=False)
+
+def table4(name1, name2):
+	# Read results as a pands DataFrame object
+	df1 = pd.read_csv(name1)
+	df2 = pd.read_csv(name2)
+
+	df = pd.concat([df1, df2])
+	df["Tag"] = df["Method"] + "-" + df["Prec"]
+	df['Iter'] = df.apply(lambda row: np.nan if row['ImplRes'] > 1.e-8 else row["Iter"], axis = 1)
+	df['Iter'] = df.apply(lambda row: np.nan if np.isnan(row['ImplRes']) else row["Iter"], axis = 1)
+
+	cg = df.Tag.eq("CG-double")
+	bi = df.Tag.eq("BiCGStab-double")
+	gm = df.Tag.eq("GMRES-double")
+	f3r = df.Tag.eq("F3R-double") | df.Tag.eq("F3R-float") | df.Tag.eq("F3R-__half")
+
+	col = ["Problem", "Tag", "Iter"]
+
+	df = df[cg | bi | gm | f3r][col]
+	df["Iter"] = df["Iter"].astype('Int64')
+	table = df.pivot(index='Problem', columns='Tag', values='Iter')
+	ta = table[['CG-double', 'BiCGStab-double', 'GMRES-double', 'F3R-double', 'F3R-float', 'F3R-__half']].reset_index()
+	ta.to_string('table4.txt', index=False)
 
 import sys
 
@@ -240,11 +264,13 @@ if __name__ == '__main__':
 	if sys.argv[1] == "4":
 		figure4("t3c-figure4.csv", "figure4.pdf")
 
-	if sys.argv[1] == "5":
-		figure5("t3c-figure5.csv", "figure5.pdf")
-
 	if sys.argv[1] == "6":
 		figure6("t3c-figure6.csv", "figure6.pdf")
 
+	if sys.argv[1] == "7":
+		figure7("t3c-figure7.csv", "figure7.pdf")
+
 	if sys.argv[1] == "table":
-		table("t3c-figure1a.csv", "t3c-figure1b.csv")
+		table3("t3c-figure1a.csv", "t3c-figure1b.csv")
+		table4("t3g-figure2a.csv", "t3g-figure2b.csv")
+		
