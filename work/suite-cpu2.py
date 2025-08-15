@@ -138,9 +138,9 @@ if __name__ == '__main__':
 			[["atmosmodd.mtx", "1.0"],   	 ["8","6","2"]],
 			[["vas_stokes_2M.mtx", "1.0"], ["8","4","1"]],
 		]
-		with open("t3c-figure5.csv", mode="w") as f:
+		with open("t3c-figure5.txt", mode="w") as f:
 			for data in subset:
-				results = T3CP(average, data, 5)
+				results = T3CP(1, data, 5) # average must be 1
 				for res in results:
 					if res != '\n':
 						f.write(res)

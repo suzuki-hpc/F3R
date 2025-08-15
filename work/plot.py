@@ -135,6 +135,84 @@ def figure4(name, savename):
 	plt.tight_layout()
 	plt.savefig(savename)
 
+def try_float(value):
+	try:
+		return float(value)
+	except (ValueError, TypeError):
+		return value
+
+def get_x(ylist):
+	return [x * 64 for x in range(len(ylist))]
+
+def figure5(name, savename):
+	palette = ['#ffffcc','#a1dab4','#41b6c4','#2c7fb8','#253494']
+	results = [[], []]
+	flag = True
+	with open(name) as f:
+		item = []
+		for line in f:
+			if line.startswith("atmosmodd"):
+				if len(item) != 0:
+					results[0].append([1.] + item)
+				item = []
+				continue
+			if line.startswith("vas_stokes_2M"):
+				if len(item) != 0:
+					if flag:
+						results[0].append([1.] + item)
+						flag = False
+					else:
+						results[1].append([1.] + item)
+				item = []
+				continue
+			it = line.split()
+			if it[0] != "0":
+				item.append(try_float(it[1]))
+	if len(item) != 0:
+		results[1].append([1.] + item)
+
+	labels = ["fp16-F3R", "F2", "fp16-F2", "F3", "fp16-F3", "F4"]
+	order = ["F2", "fp16-F2", "F3", "fp16-F3", "F4", "fp16-F3R"]
+	data = [[], []]
+
+	for j in [0, 1]:
+		for label, y in zip(labels, results[j]):
+			x = get_x(y)
+			for i in range(len(x)):
+				data[j].append({"x": x[i], "y": y[i], "label": label})
+
+	df0 = pd.DataFrame(data[0])
+	df1 = pd.DataFrame(data[1])
+
+	color=[
+		'tab:blue', 'tab:cyan', 'tab:green', 'tab:olive', 'black', '#e34a33'
+	]
+	style={
+		"F4": (4, 2, 1, 2),
+		"F3": (6, 2), "fp16-F3": (1, 1),
+		"F2": (4, 2), "fp16-F2": (2, 2, 1, 2),
+		"fp16-F3R": ''
+	}
+
+	fig, axes = plt.subplots(2, 1, figsize=(5, 5))
+	sns.lineplot(df0, x="x", y="y", hue="label", linewidth=2.,
+		style="label", dashes=style,  palette=color, hue_order=order, ax=axes[0])
+	sns.lineplot(df1, x="x", y="y", hue="label", linewidth=2.,
+		style="label", dashes=style,  palette=color, hue_order=order, ax=axes[1])
+
+	for ax in axes:
+		ax.set_yscale("log")
+		ax.set_ylim(bottom=1.e-8)
+		ax.set_xlabel("Number of applications of $M$")
+		ax.set_ylabel("Relative residual norm")
+		ax.legend()
+		ax.grid()
+	axes[0].set_xlim(left=0, right=450)
+	axes[1].set_xlim(left=0, right=4500)
+
+	plt.tight_layout()
+	plt.savefig(savename)
+
 def figure6(name, savename):
 	palette = ["#ffffcc","#c7e9b4","#7fcdbb","#41b6c4","#2c7fb8","#253494"]
 	# Read results as a pands DataFrame object
@@ -263,6 +341,9 @@ if __name__ == '__main__':
 
 	if sys.argv[1] == "4":
 		figure4("t3c-figure4.csv", "figure4.pdf")
+
+	if sys.argv[1] == "5":
+		figure5("t3c-figure5.txt", "figure5.pdf")
 
 	if sys.argv[1] == "6":
 		figure6("t3c-figure6.csv", "figure6.pdf")
