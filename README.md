@@ -2,7 +2,9 @@
 
 This repository contains the software artifact accompanying the following research paper.
 
-##### Preprint:
+Suzuki, Kengo, and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *In The International Conference for High Performance Computing, Networking, Storage and Analysis (SC ’25)*, November 16–21, 2025, St Louis, MO, USA. DOI: 10.1145/3712285.3759807
+
+**Note**: Version **v1.0.1** corresponds to the following preprint (some figure and table numbers were updated in the published version):
 
 Suzuki, Kengo, and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *arXiv preprint arXiv:2505.20719*(2025). DOI: 10.48550/arXiv.2505.20719
 
@@ -38,7 +40,7 @@ pip install -r requirements.txt
 ##### 1. Clone the repository
 
 ```bash
-git clone https://github.com/suzuki-hpc/F3R.git -b v1.0.1
+git clone https://github.com/suzuki-hpc/F3R.git -b v1.0.2
 cd F3R
 ```
 
@@ -110,6 +112,7 @@ python suite-cpu2.py <average> figure3
 python suite-cpu2.py <average> figure4
 python suite-cpu2.py <average> figure5
 python suite-cpu2.py <average> figure6
+python suite-cpu2.py <average> figure7
 ```
 
 `<average>` is the same parameter as for `suite-cpu.py`; that is, it specifies the number of repetitions. `1` would be sufficient to reproduce the results quickly.
@@ -143,14 +146,14 @@ python suite-gpu.py <average> figure2b full
 
 ### Visualize Results (T4)
 
-After execution, numerical results will be stored as CSV in the `work` directory. To generate a table and figures corresponding to the paper:
+After execution, numerical results will be stored as CSV or TXT in the `work` directory. To generate tables and figures corresponding to the paper, execute the following commands:
 
 ```zsh
-python plot.py table # Generates Table 3
+python plot.py table # Generates Tables 3 and 4
 
 python plot.py 1     # Generates Figure 1
 python plot.py 2     # Generates Figure 2
 ...
-python plot.py 6     # Generates Figure 6
+python plot.py 7     # Generates Figure 7
 ```
 
