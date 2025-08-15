@@ -2,11 +2,11 @@
 
 This repository contains the software artifact accompanying the following research paper.
 
-Suzuki, Kengo, and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *In The International Conference for High Performance Computing, Networking, Storage and Analysis (SC ’25)*, November 16–21, 2025, St Louis, MO, USA. DOI: 10.1145/3712285.3759807
+Kengo Suzuki and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *In The International Conference for High Performance Computing, Networking, Storage and Analysis (SC ’25)*, November 16–21, 2025, St Louis, MO, USA. DOI: 10.1145/3712285.3759807
 
-**Note**: Version **v1.0.1** corresponds to the following preprint (some figure and table numbers were updated in the published version):
+**Note**: Version v1.0.1 corresponds to the following preprint (some figure and table numbers were updated in the published version):
 
-Suzuki, Kengo, and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *arXiv preprint arXiv:2505.20719*(2025). DOI: 10.48550/arXiv.2505.20719
+Kengo Suzuki and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *arXiv preprint arXiv:2505.20719*(2025). DOI: 10.48550/arXiv.2505.20719
 
 ## Hardware Requirements
 
