@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     nrm_b = nrm(b);
     auto cond = [=]([[maybe_unused]]int i, double e) {
 #if defined(LOGGING)
-      printf("%d %e\n", i, e);
+      printf("%d %e\n", i, e / nrm_b[0]);
 #endif
       return e / nrm_b[0] < eps;
     };
