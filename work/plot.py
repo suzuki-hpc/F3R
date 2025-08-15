@@ -208,7 +208,9 @@ def figure5(name, savename):
 		ax.legend()
 		ax.grid()
 	axes[0].set_xlim(left=0, right=450)
+	axes[0].set_title("atmosmodd")
 	axes[1].set_xlim(left=0, right=4500)
+	axes[1].set_title("vas_stokes_2M")
 
 	plt.tight_layout()
 	plt.savefig(savename)
