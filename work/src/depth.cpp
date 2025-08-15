@@ -83,6 +83,9 @@ int main(int argc, char *argv[]) {
     scalar<double, host> nrm_b, nrm_r;
     nrm_b = nrm(b);
     auto cond = [=]([[maybe_unused]]int i, double e) {
+#if defined(LOGGING)
+      printf("%d %e\n", i, e);
+#endif
       return e / nrm_b[0] < eps;
     };
     t.tick();
@@ -95,12 +98,16 @@ int main(int argc, char *argv[]) {
       double sum = 0;
       for (const auto &d : t.durations)
         sum += d.count();
+#if !defined(LOGGING)
       printf("%e,", sum/suite_iter);
       printf("%d,%e,", itr_sum*ww/suite_iter, flag.res_nrm2 / nrm_b[0]);
+#endif
       A.operate(x, r);
       r = b - r;
       nrm_r = nrm(r);
+#if !defined(LOGGING)
       printf("%e\n", nrm_r[0] / nrm_b[0]);
+#endif
     }
   };
 
@@ -164,6 +171,10 @@ int main(int argc, char *argv[]) {
             << type_name << ","
             << m2 << "," << m3 << "," << m4 << "," << c << ","
             << precond;
+
+#if defined(LOGGING)
+  std::cout << std::endl;
+#endif
 
   auto t = timer();
   int itr_sum = 0;
