@@ -63,6 +63,22 @@ def T3CP(ave, data, switch):
 			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
 			results.append(result.stdout)
 
+	if switch == 5: # For figure 5
+		exes = [
+			"./bin/f3r16_log.exe",
+			"./bin/f2_log.exe", './bin/f2h_log.exe',
+			"./bin/f3_log.exe", './bin/f3h_log.exe',
+			"./bin/f4_log.exe"
+		]
+		for b in exes:
+			add = None
+			if 'f3r' in b:
+				add = ["8", "4", "2", "64", "3"]
+			else:
+				add = ["0", "0", "0", "0", "3"]
+			result = subprocess.run(policy+[b]+data[0]+[str(ave)]+add, capture_output=True, text=True)
+			results.append(result.stdout)
+
 	if switch == 6: # For figure 6
 		exe = "./bin/f3r16.exe"
 		params = ["1", "4", "16", "32", "64", "128", "256"]
@@ -112,6 +128,19 @@ if __name__ == '__main__':
 			f.write("Problem,Method,Prec,M2,M3,M4,W,Precond,ACC,Time,Iter,ImplRes,ExplRes\n")
 			for data in matrices[::step]:
 				results = T3CP(average, data, 4)
+				for res in results:
+					if res != '\n':
+						f.write(res)
+				f.flush()
+
+	if sys.argv[2] == "figure5":
+		subset = [
+			[["atmosmodd.mtx", "1.0"],   	 ["8","6","2"]],
+			[["vas_stokes_2M.mtx", "1.0"], ["8","4","1"]],
+		]
+		with open("t3c-figure5.csv", mode="w") as f:
+			for data in subset:
+				results = T3CP(average, data, 5)
 				for res in results:
 					if res != '\n':
 						f.write(res)
