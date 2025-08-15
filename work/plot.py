@@ -193,11 +193,14 @@ def figure5(name, savename):
 		"F2": (4, 2), "fp16-F2": (2, 2, 1, 2),
 		"fp16-F3R": ''
 	}
+	markers=[
+		(4,1,0), 's', 'D', 'X', 'P', 'o'
+	]
 
 	fig, axes = plt.subplots(2, 1, figsize=(5, 5))
-	sns.lineplot(df0, x="x", y="y", hue="label", linewidth=2.,
+	sns.lineplot(df0, x="x", y="y", hue="label", linewidth=2., markers=markers,
 		style="label", dashes=style,  palette=color, hue_order=order, ax=axes[0])
-	sns.lineplot(df1, x="x", y="y", hue="label", linewidth=2.,
+	sns.lineplot(df1, x="x", y="y", hue="label", linewidth=2., markers=markers, markevery=10,
 		style="label", dashes=style,  palette=color, hue_order=order, ax=axes[1])
 
 	for ax in axes:
@@ -353,7 +356,9 @@ if __name__ == '__main__':
 	if sys.argv[1] == "7":
 		figure7("t3c-figure7.csv", "figure7.pdf")
 
-	if sys.argv[1] == "table":
+	if sys.argv[1] == "table3":
 		table3("t3c-figure1a.csv", "t3c-figure1b.csv")
+
+	if sys.argv[1] == "table4":
 		table4("t3g-figure2a.csv", "t3g-figure2b.csv")
 		
