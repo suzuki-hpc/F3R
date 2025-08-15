@@ -104,7 +104,7 @@ python suite-cpu.py <average> figure1b full
 
 #### Reproducing the results in Section 6
 
-Execute `suite-cpu2.py` with four different arguments corresponding to Figures 3, 4, 5, and 6:
+Execute `suite-cpu2.py` with four different arguments corresponding to Figures 3–7:
 
 ```bash
 # in the `work` directory
@@ -149,7 +149,8 @@ python suite-gpu.py <average> figure2b full
 After execution, numerical results will be stored as CSV or TXT in the `work` directory. To generate tables and figures corresponding to the paper, execute the following commands:
 
 ```zsh
-python plot.py table # Generates Tables 3 and 4
+python plot.py table3 # Generates Table 3
+python plot.py table4 # Generates Table 4
 
 python plot.py 1     # Generates Figure 1
 python plot.py 2     # Generates Figure 2
