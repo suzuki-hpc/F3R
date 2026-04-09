@@ -40,7 +40,7 @@ template <> struct memory<device> {
   template <typename T> static T *alloc(size_t size) {
     T *ptr;
     cudaMalloc((void **)&ptr, sizeof(T) * size);
-    cudaMemset((void **)&ptr, 0, sizeof(T) * size);
+    cudaMemset(ptr, 0, sizeof(T) * size);
     return ptr;
   }
   static void free(void *ptr) { cudaFree(ptr); }
