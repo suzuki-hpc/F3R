@@ -1,7 +1,6 @@
 #ifndef UMINEKO_SPARSE_MATRIX_IO_HPP
 #define UMINEKO_SPARSE_MATRIX_IO_HPP
 
-#include <charconv>
 #include <fstream>
 #include <functional>
 #include <string>
@@ -309,8 +308,6 @@ private:
   template <typename T> static T _read_num_and_move_ptr(char *&ptr) {
     char *end;
     T res{};
-    // auto [p, ec] = std::from_chars(ptr, ptr + 80, res);
-    // ptr += (p - ptr) + 1;
     res = std::strtod(ptr, &end);
     ptr = end + 1;
     return res;
