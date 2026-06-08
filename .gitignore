@@ -1,0 +1,7 @@
+.*
+!.gitignore
+
+*.code-workspace
+*.pdf
+*.csv
+*.txt
