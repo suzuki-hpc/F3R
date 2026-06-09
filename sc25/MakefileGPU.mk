@@ -1,5 +1,5 @@
 CXX ?= nvc++
-INCLUDE := -I ../library
+INCLUDE := -I ..
 OPTIONS := -std=c++17 -O3 -fopenmp -cuda
 EXECDIR := bin
 CLEAN_EXES := $(wildcard bin/*.exe)

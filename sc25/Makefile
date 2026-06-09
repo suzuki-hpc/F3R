@@ -1,6 +1,6 @@
 CXX ?= icpx
-INCLUDE := -I ../library
-OPTIONS := -std=c++17 -fast -qopenmp -xCORE-AVX512 -mavx512fp16 -qnextgen
+OPTIONS ?= -std=c++20 -fast -qopenmp -xCORE-AVX512 -mavx512fp16
+INCLUDE := -I ..
 EXECDIR := bin
 CLEAN_EXES := $(filter-out bin/*-gpu.exe,$(wildcard bin/*.exe))
 
