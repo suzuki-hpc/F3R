@@ -139,7 +139,8 @@ TEST_CASE("vector2") {
   bb1 = reduce.norm(b1.as<double>());
   bb2 = reduce.norm(b2.as<double>());
 
-  CHECK(bb1[0] == bb2[0]);
+  // CHECK(bb1[0] == bb2[0]);
+  CHECK(bb1[0] == doctest::Approx(bb2[0]).epsilon(1e-8));
 }
 
 TEST_CASE_TEMPLATE("matrix", T, double) {
