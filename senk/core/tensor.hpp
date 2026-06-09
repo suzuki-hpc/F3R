@@ -1,5 +1,5 @@
-#ifndef UNMK_CORE_TENSOR_HPP
-#define UNMK_CORE_TENSOR_HPP
+#ifndef SENK_CORE_TENSOR_HPP
+#define SENK_CORE_TENSOR_HPP
 
 #include <cmath>
 #include <memory>
@@ -326,7 +326,7 @@ struct scalar : impl::tensor<T, 0, L> {
   explicit scalar(const scalar<T2, L2> &in) : impl::tensor<T, 0, L>(in) {
     copy(in);
   }
-  explicit scalar(T *ptr, impl::_shape<0>) : impl::tensor<T, 0, L>(ptr, {}){};
+  explicit scalar(T *ptr, impl::_shape<0>) : impl::tensor<T, 0, L>(ptr, {}) {};
   scalar &operator=(const scalar &rhs) = default;
   val_t &operator[]([[maybe_unused]] size_t i) const { return data.get()[0]; }
   view_t view() const { return *this; }
@@ -334,7 +334,7 @@ struct scalar : impl::tensor<T, 0, L> {
 #define KMM_SCAL_ASSIGN(COND, OP, RHS, INIT)                                   \
   template <class E>                                                           \
   SENK_RET(COND, scalar &)                                                     \
-  operator OP(E && e) {                                                        \
+  operator OP(E &&e) {                                                         \
     auto p = raw();                                                            \
     INIT;                                                                      \
     kernel<loc_t>::single(                                                     \
@@ -425,7 +425,7 @@ struct vector : impl::tensor<T, 1, L> {
   explicit vector(const vector<T2, L2> &in) : impl::tensor<T, 1, L>(in) {
     copy(in);
   }
-  vector(T *ptr, impl::_shape<1> size) : impl::tensor<T, 1, L>(ptr, size){};
+  vector(T *ptr, impl::_shape<1> size) : impl::tensor<T, 1, L>(ptr, size) {};
   vector &operator=(const vector &rhs) = default;
   auto operator()(size_t i) const {
     return scalar<T, L>(raw() + i, impl::_shape<0>(*this));
@@ -440,7 +440,7 @@ struct vector : impl::tensor<T, 1, L> {
 #define KMM_VECTOR_ASSIGN(COND, OP, RHS, INIT)                                 \
   template <class E>                                                           \
   SENK_RET(COND, vector &)                                                     \
-  operator OP(E && e) {                                                        \
+  operator OP(E &&e) {                                                         \
     auto p = raw();                                                            \
     INIT;                                                                      \
     kernel<loc_t>::parallel(shape(0),                                          \
@@ -556,7 +556,7 @@ struct matrix : impl::tensor<T, 2, L> {
   explicit matrix(const matrix<T2, L2> &in) : impl::tensor<T, 2, L>(in) {
     copy(in);
   }
-  matrix(T *ptr, impl::_shape<2> size) : impl::tensor<T, 2, L>(ptr, size){};
+  matrix(T *ptr, impl::_shape<2> size) : impl::tensor<T, 2, L>(ptr, size) {};
   auto operator()(size_t col) const {
     return vector<T, L>(raw() + this->arr[0] * col, impl::_shape<1>(*this));
   }
@@ -578,13 +578,13 @@ private:
 #define PST_DEFINE_UNARY(name, op)                                             \
   template <typename L,                                                        \
       SENK_ENABULER(senk::impl::is_tensor_v<std::decay_t<L>>)>                 \
-  name<typename std::decay_t<L>::view_t> operator op(L && v1) {                \
+  name<typename std::decay_t<L>::view_t> operator op(L &&v1) {                 \
     return name<typename std::decay_t<L>::view_t>(                             \
         std::forward<typename std::decay_t<L>::view_t>(v1.view()));            \
   }                                                                            \
   template <typename L,                                                        \
       SENK_ENABULER(!senk::impl::is_tensor_v<std::decay_t<L>>)>                \
-  name<std::decay_t<L>> operator op(L && v1) {                                 \
+  name<std::decay_t<L>> operator op(L &&v1) {                                  \
     return name<std::decay_t<L>>(std::forward<std::decay_t<L>>(v1));           \
   }
 #define PST_DEFINE_BINARY_CASE(                                                \
@@ -592,7 +592,7 @@ private:
   template <typename L, typename R,                                            \
       SENK_ENABULER(lcond senk::impl::is_tensor_v<std::decay_t<L>>),           \
       SENK_ENABULER(rcond senk::impl::is_tensor_v<std::decay_t<R>>)>           \
-  name<ltype, rtype> operator op(L && v1, R && v2) {                           \
+  name<ltype, rtype> operator op(L &&v1, R &&v2) {                             \
     return name<ltype, rtype>(                                                 \
         std::forward<ltype>(lexpr), std::forward<rtype>(rexpr));               \
   }

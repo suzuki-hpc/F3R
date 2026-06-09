@@ -94,7 +94,6 @@ private:
   template <typename in_t, typename out_t>
   void apply_impl(const vector<in_t, L> &in, vector<out_t, L> out) const {
     if constexpr (std::is_same_v<strat, strategy::direct>) {
-      // static_assert(std::is_same_v<L, host>, "direct must be on host");
       impl::trsv_csr_apply_direct<loc_t, form>(
           nrows(), val.raw(), col.raw(), rptr.raw(), in.raw(), out.raw());
     } else if constexpr (std::is_same_v<strat, strategy::level>) {

@@ -89,7 +89,7 @@ struct RichardsonAdapt : public has_val_t<T>,
 
   using mid_t = std::conditional_t<std::is_same_v<val_t, half>, float, T>;
 
-  mutable Params prm;
+  Params prm;
 
   Op A;
   Pre M;
@@ -97,6 +97,12 @@ struct RichardsonAdapt : public has_val_t<T>,
   RichardsonAdapt(const Op &A, const Pre &M, Params prm)
       : prm(prm), A(A), M(M), r(A.nrows()), temp1(A.nrows()), temp2(A.nrows()),
         a(prm.max_iter), reduce(A.nrows()) {
+    a.fill(prm.weight);
+    cnt = 0;
+    num.fill(1.);
+  }
+
+  void reset_param() {
     a.fill(prm.weight);
     cnt = 0;
     num.fill(1.);
