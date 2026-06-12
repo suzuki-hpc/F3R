@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 #if defined(DOUBLE)
   auto L = trsv::l::CSR<double, host, strategy::partition>(l);
   auto U = trsv::du::CSR<double, host, strategy::partition>(u);
-  auto M = concat<double>(L, U);
+  auto M = concat<double>(U, L);
   auto R = Solver<RichardsonAdapt, double>(A, M, {m4, 1.0, c});
   auto F = Solver<FGMRES, double>(A, R, {m3, true});
   auto F2 = Solver<FGMRES, double>(A, F, {m2, true});
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
   auto A32 = CSR<float, tag>(A);
   auto L = trsv::l::CSR<float, host, strategy::partition>(l);
   auto U = trsv::du::CSR<float, host, strategy::partition>(u);
-  auto M = concat<float>(L, U);
+  auto M = concat<float>(U, L);
   auto R = Solver<RichardsonAdapt, float>(A, M, {m4, 1.0, c});
   auto F = Solver<FGMRES, float>(A32, R, {m3, true});
   auto F2 = Solver<FGMRES, float>(A32, F, {m2, true});
@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
   auto A16 = CSR<half, tag>(A);
   auto L = trsv::l::CSR<half, host, strategy::partition>(l);
   auto U = trsv::du::CSR<half, host, strategy::partition>(u);
-  auto M = concat<half>(L, U);
+  auto M = concat<half>(U, L);
   auto R = Solver<RichardsonAdapt, half>(A, M, {m4, 1.0, c});
   auto F = Solver<FGMRES, float>(A16, R, {m3, true});
   auto F2 = Solver<FGMRES, float>(A32, F, {m2, true});

@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
   auto L = trsv::l::CSR<half, host, strategy::partition>(l);
   auto U = trsv::du::CSR<half, host, strategy::partition>(u);
-  auto M = concat<half>(L, U);
+  auto M = concat<half>(U, L);
 
 #if defined(F4)
   auto A16 = CSR<half, tag>(A);

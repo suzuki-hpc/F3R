@@ -74,8 +74,7 @@ int main(int argc, char *argv[]) {
         printf("%e,", sum / suite_iter);
         printf("%d,%e,", itr_sum * ww / suite_iter, flag.res_nrm2 / nrm_b[0]);
       }
-      A.apply(x, r);
-      r = b - r;
+      A.residual(b, x, r);
       nrm_r = reduce.norm(r);
       printf("%e\n", nrm_r[0] / nrm_b[0]);
     }
@@ -85,7 +84,7 @@ int main(int argc, char *argv[]) {
 
   auto L = trsv::l::CSR<precond_type, host, strategy::partition>(l);
   auto U = trsv::du::CSR<precond_type, host, strategy::partition>(u);
-  auto M = concat<double>(L, U);
+  auto M = concat<double>(U, L);
 
 #if defined(SOLV_BiCG)
   const std::string solver_name = "BiCGStab";
@@ -121,8 +120,8 @@ int main(int argc, char *argv[]) {
   int itr_sum = 0;
   for (int i = 0; i < suite_iter; i++) {
     bool is_solved = (i == suite_iter - 1)
-        ? test(solver, b, t, true, itr_sum, ww)
-        : test(solver, b, t, false, itr_sum, ww);
+                         ? test(solver, b, t, true, itr_sum, ww)
+                         : test(solver, b, t, false, itr_sum, ww);
     if (!is_solved)
       break;
   }

@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
   auto A16 = CSR<half, tag>(A);
   auto L = trsv::l::CSR<half, host, strategy::partition>(l);
   auto U = trsv::du::CSR<half, host, strategy::partition>(u);
-  auto M = concat<half>(L, U);
+  auto M = concat<half>(U, L);
   auto R = Solver<Richardson, half>(A, M, {m4, weight});
   auto F = Solver<FGMRES, float>(A16, R, {m3, true});
   auto F2 = Solver<FGMRES, float>(A32, F, {m2, true});
