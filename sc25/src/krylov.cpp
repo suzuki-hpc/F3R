@@ -19,8 +19,8 @@ const std::string precond_name = "BJILU0";
 using precond_type = TYPE;
 
 int main(int argc, char *argv[]) {
-  // std::string path = std::string("../matrix/") + argv[1];
-  std::string path = argv[1];
+  std::string path = std::string("../matrix/") + argv[1];
+  // std::string path = argv[1];
   double acc = atof(argv[2]);
 
   int suite_iter = atoi(argv[3]);
