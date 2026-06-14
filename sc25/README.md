@@ -1,12 +1,4 @@
-# F3R: A Mixed-Precision Linear Solver
-
-This repository contains the software artifact accompanying the following research paper.
-
-Kengo Suzuki and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *In The International Conference for High Performance Computing, Networking, Storage and Analysis (SC ’25)*, November 16–21, 2025, St Louis, MO, USA. DOI: 10.1145/3712285.3759807
-
-**Note**: Version v1.0.1 corresponds to the following preprint (some figure and table numbers were updated in the published version):
-
-Kengo Suzuki and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision Arithmetic." *arXiv preprint arXiv:2505.20719*(2025). DOI: 10.48550/arXiv.2505.20719
+# Reproduce results in the paper
 
 ## Hardware Requirements
 
@@ -19,15 +11,13 @@ Kengo Suzuki and Takeshi Iwashita. "A Nested Krylov Method Using Half-Precision 
 
 - **Compilers**:
   - **CPU Execution**: Intel oneAPI DPC++/C++ Compiler (`icpx`), version 2023.2.4+ with `-mavx512fp16`
-  - **GPU Execution**: NVIDIA HPC SDK `nvc++`, version 23.9+ with `-cuda`
-  - **Note**: Compilers must support C++17
+  - **GPU Execution**: NVIDIA CUDA Compiler `nvcc` version 23.9+, together with a compatible host C++ compiler (e.g., `g++`)
+  - **Note**: Compilers must support C++20
 - **Python**: Version 3.8+
   - `Pandas >= 2.0.3`
   - `seaborn==0.13.2`
 - **Build Tool**:
   - GNU Make 4.2.1
-
-You can install `icpx` from the [Intel oneAPI Base Toolkit](https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html) and `nvc++` from the [NVIDIA HPC SDK](https://developer.nvidia.com/nvidia-hpc-sdk-239-downloads).
 
 Install the required Python packages manually or with:
 
@@ -40,8 +30,8 @@ pip install -r requirements.txt
 ##### 1. Clone the repository
 
 ```bash
-git clone https://github.com/suzuki-hpc/F3R.git -b v1.0.2
-cd F3R
+git clone https://github.com/suzuki-hpc/F3R.git -b v2.0.0
+cd F3R/sc25
 ```
 
 ##### 2. Prepare datasets
@@ -55,9 +45,8 @@ make            # Generate HPCG and HPGMP matrices
 ##### 3. Compile solvers
 
 ```bash
-cd work
-make CXX=icpx                  # For CPU-only execution
-make -f MakefileGPU CXX=nvc++  # For GPU execution
+make -f Makefile CXX=icpx    # For CPU-only execution
+make -f MakefileGPU CXX=g++  # For GPU execution
 ```
 
 ## Execution
@@ -83,7 +72,7 @@ T1 → T2 → T3_C + T3_G → T4
 Run the following two independent commands:
 
 ```bash
-# in the `work` directory
+# in the `sc25` directory
 python suite-cpu.py <average> figure1a
 python suite-cpu.py <average> figure1b
 ```
@@ -107,7 +96,7 @@ python suite-cpu.py <average> figure1b full
 Execute `suite-cpu2.py` with four different arguments corresponding to Figures 3–7:
 
 ```bash
-# in the `work` directory
+# in the `sc25` directory
 python suite-cpu2.py <average> figure3
 python suite-cpu2.py <average> figure4
 python suite-cpu2.py <average> figure5
@@ -130,7 +119,7 @@ python suite-cpu2.py 1 figure3 full
 Run `suite-gpu.py` on a CPU-GPU system with parameters `<average>` and `figure2a` / `figure2b`:
 
 ```bash
-# in the `work` directory
+# in the `sc25` directory
 python suite-gpu.py <average> figure2a
 python suite-gpu.py <average> figure2b
 ```
@@ -146,7 +135,7 @@ python suite-gpu.py <average> figure2b full
 
 ### Visualize Results (T4)
 
-After execution, numerical results will be stored as CSV or TXT in the `work` directory. To generate tables and figures corresponding to the paper, execute the following commands:
+Experimental results are written to CSV or TXT files in the `work` directory. To generate tables and figures reported in the paper, execute:
 
 ```zsh
 python plot.py table3 # Generates Table 3
