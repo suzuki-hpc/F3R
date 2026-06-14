@@ -65,7 +65,10 @@ foreach(target IN LISTS SENK_TARGETS_TO_BUILD)
       $<$<COMPILE_LANGUAGE:CUDA>:--extended-lambda --expt-relaxed-constexpr -Xcompiler=-fopenmp,-O3,-std=c++20>
     )
     target_include_directories(cuda_test PRIVATE ${COMMON_INCLUDES})
-    target_link_libraries(cuda_test PRIVATE OpenMP::OpenMP_CXX)
+    find_package(OpenMP REQUIRED COMPONENTS CXX)
+    if (OpenMP_CXX_FOUND)
+      target_link_libraries(cuda_test PRIVATE OpenMP::OpenMP_CXX)
+    endif()
     target_link_libraries(cuda_test PRIVATE cusparse_static cudart)
 
   elseif(target STREQUAL "hip")
@@ -88,7 +91,10 @@ foreach(target IN LISTS SENK_TARGETS_TO_BUILD)
       HIP_STANDARD 20
     )
     target_include_directories(hip_test PRIVATE ${COMMON_INCLUDES})
-    target_link_libraries(hip_test PRIVATE OpenMP::OpenMP_CXX)
+    find_package(OpenMP REQUIRED COMPONENTS CXX)
+    if (OpenMP_CXX_FOUND)
+      target_link_libraries(hip_test PRIVATE OpenMP::OpenMP_CXX)
+    endif()
     target_link_libraries(hip_test PRIVATE hip::device)
 
   else()
