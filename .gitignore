@@ -1,0 +1,16 @@
+.*
+!.gitignore
+!.gitmodules
+
+build
+
+*.code-workspace
+*.pdf
+*.csv
+*.exe
+*.out
+
+table.txt
+table3.txt
+table4.txt
+t3c-figure5.txt
