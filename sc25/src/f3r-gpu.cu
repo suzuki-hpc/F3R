@@ -19,7 +19,8 @@ const std::string precond_name = "SDAINV";
 using precond_type = TYPE;
 
 int main(int argc, char *argv[]) {
-  std::string path = std::string("../matrix/") + argv[1];
+  // std::string path = std::string("../matrix/") + argv[1];
+  std::string path = argv[1];
   double acc = atof(argv[2]);
 
   int suite_iter = atoi(argv[3]);
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]) {
     auto cond = converg::rrn(nrm_b[0], eps);
 
     t.tick();
-    auto flag = solver.solve(b, x, cond);
+    auto flag = solver(b, x, cond);
     t.tock();
 
     itr_sum += flag.res_iter;
@@ -83,9 +84,9 @@ int main(int argc, char *argv[]) {
   auto F = Solver<FGMRES, double>(A, R, {m3, true});
   auto F2 = Solver<FGMRES, double>(A, F, {m2, true});
   auto f3r = Solver<FGMRES, double>(A, F2, {100, false});
-  auto solver = [&f3r](auto b, auto x, auto cnv) {
+  auto solver = [&f3r, &restart](auto b, auto x, auto cnv) {
     auto res = f3r.solve(b, x, cnv);
-    while (!res.is_solved && res.res_iter < 300)
+    while (!res.is_solved && res.res_iter < 100 * restart)
       res += f3r.solve(b, x, cnv);
     return res;
   };
@@ -100,15 +101,16 @@ int main(int argc, char *argv[]) {
   auto F = Solver<FGMRES, float>(A32, R, {m3, true});
   auto F2 = Solver<FGMRES, float>(A32, F, {m2, true});
   auto f3r = Solver<FGMRES, double>(A, F2, {100, false});
-  auto solver = [&f3r](auto b, auto x, auto cnv) {
+  auto solver = [&f3r, &restart](auto b, auto x, auto cnv) {
     auto res = f3r.solve(b, x, cnv);
-    while (!res.is_solved && res.res_iter < 300)
+    while (!res.is_solved && res.res_iter < 100 * restart)
       res += f3r.solve(b, x, cnv);
     return res;
   };
 #endif
 
 #if defined(HALF)
+  auto A32 = SELL32<float, tag>(A);
   auto A16 = SELL32<half, tag>(A);
   auto W = SELL32<half, tag>(w);
   auto Z = SELL32<half, tag>(z);
@@ -117,9 +119,9 @@ int main(int argc, char *argv[]) {
   auto F = Solver<FGMRES, float>(A16, R, {m3, true});
   auto F2 = Solver<FGMRES, float>(A32, F, {m2, true});
   auto f3r = Solver<FGMRES, double>(A, F2, {100, false});
-  auto solver = [&f3r](auto b, auto x, auto cnv) {
+  auto solver = [&f3r, &restart](auto b, auto x, auto cnv) {
     auto res = f3r.solve(b, x, cnv);
-    while (!res.is_solved && res.res_iter < 300)
+    while (!res.is_solved && res.res_iter < 100 * restart)
       res += f3r.solve(b, x, cnv);
     return res;
   };

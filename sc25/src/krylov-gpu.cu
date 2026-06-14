@@ -19,7 +19,8 @@ const std::string precond_name = "SDAINV";
 using precond_type = TYPE;
 
 int main(int argc, char *argv[]) {
-  std::string path = std::string("../matrix/") + argv[1];
+  // std::string path = std::string("../matrix/") + argv[1];
+  std::string path = argv[1];
   double acc = atof(argv[2]);
 
   int suite_iter = atoi(argv[3]);
@@ -55,7 +56,7 @@ int main(int argc, char *argv[]) {
     auto cond = converg::rrn(nrm_b[0], eps);
 
     t.tick();
-    auto flag = solver.solve(b, x, cond);
+    auto flag = solver(b, x, cond);
     t.tock();
 
     itr_sum += flag.res_iter;
@@ -101,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 #if defined(SOLV_GM)
   const std::string solver_name = "GMRES";
-  auto gmres = Solver<tag>(FGMRES<double, tag>(A, M, {64, true}));
+  auto gmres = Solver<FGMRES, double>(A, M, {64, false});
   auto solver = [&gmres](auto b, auto x, auto cnv) {
     auto res = gmres.solve(b, x, cnv);
     while (!res.is_solved && res.res_iter < 19200)
